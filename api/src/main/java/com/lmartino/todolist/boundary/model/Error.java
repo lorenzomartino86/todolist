@@ -10,5 +10,5 @@ import lombok.Data;
 public class Error {
     private String errorMessage;
 
-    public enum Message {AUTHENTICATION_ERROR, MISSING_USER}
+    public enum Message {AUTHENTICATION_ERROR, MISSING_USER, DUPLICATED_USER}
 }

@@ -1,17 +1,16 @@
 package com.lmartino.todolist.service;
 
-import com.lmartino.todolist.boundary.handler.TodolistHandler;
 import com.lmartino.todolist.boundary.model.UserCredential;
 import com.lmartino.todolist.repository.UserRepository;
 import com.lmartino.todolist.repository.model.User;
 import com.lmartino.todolist.service.exception.AuthenticationError;
+import com.lmartino.todolist.service.exception.DuplicatedUser;
 import com.lmartino.todolist.service.exception.MissingUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.lmartino.todolist.boundary.model.UserCredential.builder;
 import static org.mockito.Mockito.when;
@@ -28,6 +27,27 @@ public class UserServiceTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void userCanRegister() throws Exception {
+        final String username = "test";
+        final String password = "pwd123";
+        UserCredential credential = builder().username(username).password(password).build();
+        userService.register(credential);
+    }
+
+    @Test(expected = DuplicatedUser.class)
+    public void cannotRegisterDuplicatedUser() throws Exception {
+        final String username = "test";
+        final String password = "pwd123";
+        UserCredential credential = builder().username(username).password(password).build();
+
+        // Stub repository
+        User user = User.builder().username(username).password(password).build();
+        when(userRepository.findByUsername(username)).thenReturn(user);
+
+        userService.register(credential);
     }
 
     @Test
