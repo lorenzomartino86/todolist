@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.lmartino.todolist.boundary.handler.TodolistHandler;
 import com.lmartino.todolist.service.exception.AuthenticationError;
 import com.lmartino.todolist.boundary.model.UserCredential;
-import com.lmartino.todolist.service.LoginService;
+import com.lmartino.todolist.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -15,31 +15,48 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static com.lmartino.todolist.boundary.model.Error.Message.AUTHENTICATION_ERROR;
 import static com.lmartino.todolist.boundary.model.UserCredential.builder;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class LoginControllerTest {
+public class UserControllerTest {
 
     private MockMvc mvc;
 
     @Mock
-    private LoginService loginService;
+    private UserService userService;
 
     @InjectMocks
-    private LoginController loginController;
+    private UserController userController;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mvc = MockMvcBuilders
-                .standaloneSetup(loginController)
+                .standaloneSetup(userController)
                 .setControllerAdvice(new TodolistHandler())
                 .build();
     }
 
     private ObjectWriter jsonWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+    @Test
+    public void givenNewUser_whenUserRegister_thenApiStoreCredentialAndReturnOk() throws Exception {
+        UserCredential credential = builder()
+                .username("test")
+                .password("pwd123")
+                .build();
+
+        mvc.perform(post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonWriter.writeValueAsString(credential)))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void givenCorrectUsernameAndPassword_whenUserLogin_thenApiReturnOk() throws Exception {
@@ -48,12 +65,11 @@ public class LoginControllerTest {
                 .password("pwd123")
                 .build();
 
-        mvc.perform(get("/login")
+        mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
                 .andExpect(status().isOk());
     }
-
 
     @Test
     public void givenWrongUsernameAndPassword_whenUserLogin_thenApiReturnForbidden() throws Exception {
@@ -64,11 +80,12 @@ public class LoginControllerTest {
 
         // Stub login service
        doThrow(new AuthenticationError("Cannot authenticate user"))
-               .when(loginService).login(credential);
+               .when(userService).login(credential);
 
-        mvc.perform(get("/login")
+        mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.errorMessage", is(AUTHENTICATION_ERROR.name())));
     }
 }
