@@ -17,6 +17,7 @@ $(document).ready(function(){
             contentType: 'application/json',
             success: function (result) {
                console.log(result);
+               location.href = "todolist.html"
             },
             error: function (e) {
                console.log(e);
