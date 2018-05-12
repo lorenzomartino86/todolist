@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.lmartino.todolist.boundary.handler.TodolistHandler;
 import com.lmartino.todolist.boundary.model.UserCredential;
+import com.lmartino.todolist.boundary.model.UserPresentation;
 import com.lmartino.todolist.service.UserService;
 import com.lmartino.todolist.service.exception.AuthenticationError;
 import org.junit.Before;
@@ -18,6 +19,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static com.lmartino.todolist.boundary.model.Error.Message.AUTHENTICATION_ERROR;
 import static com.lmartino.todolist.boundary.model.UserCredential.builder;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,16 +47,22 @@ public class UserControllerTest {
     }
 
     @Test
-    public void givenNewUser_whenUserRegister_thenApiStoreCredentialAndReturnOk() throws Exception {
+    public void givenNewUser_whenUserRegister_thenApiStoreCredentialAndReturnCreated() throws Exception {
         UserCredential credential = builder()
                 .username("test")
                 .password("pwd123")
                 .build();
 
+        // stub user service
+        final UserPresentation userPresentation = UserPresentation.builder().id(1).username(credential.getUsername()).build();
+        given(userService.register(credential.getUsername(), credential.getPassword())).willReturn(userPresentation);
+
         mvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(notNullValue())))
+                .andExpect(jsonPath("$.username", is(credential.getUsername())));
     }
 
     @Test
@@ -63,10 +72,16 @@ public class UserControllerTest {
                 .password("pwd123")
                 .build();
 
+        // stub user service
+        final UserPresentation userPresentation = UserPresentation.builder().id(1).username(credential.getUsername()).build();
+        given(userService.login(credential.getUsername(), credential.getPassword())).willReturn(userPresentation);
+
         mvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(notNullValue())))
+                .andExpect(jsonPath("$.username", is(credential.getUsername())));
     }
 
     @Test

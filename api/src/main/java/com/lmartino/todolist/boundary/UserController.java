@@ -4,6 +4,7 @@ import com.lmartino.todolist.boundary.model.UserCredential;
 import com.lmartino.todolist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,14 +20,13 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody UserCredential credential) {
-        userService.register(credential.getUsername(), credential.getPassword());
-        return ResponseEntity.ok(HttpEntity.EMPTY);
+        return new ResponseEntity(userService.register(credential.getUsername(), credential.getPassword()),
+                HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserCredential credential) {
-        userService.login(credential.getUsername(), credential.getPassword());
-        return ResponseEntity.ok(HttpEntity.EMPTY);
+        return ResponseEntity.ok(userService.login(credential.getUsername(), credential.getPassword()));
     }
 
 }

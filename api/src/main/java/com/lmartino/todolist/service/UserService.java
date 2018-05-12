@@ -1,5 +1,6 @@
 package com.lmartino.todolist.service;
 
+import com.lmartino.todolist.boundary.model.UserPresentation;
 import com.lmartino.todolist.repository.UserRepository;
 import com.lmartino.todolist.repository.model.User;
 import com.lmartino.todolist.service.exception.AuthenticationError;
@@ -23,7 +24,7 @@ public class UserService {
     @Autowired
     private EncodingService encodingService;
 
-    public void register(final String username, final String password) {
+    public UserPresentation register(final String username, final String password) {
         final String usernameHash = encodingService.hash(username);
         final String passwordHash = encodingService.hash(password);
 
@@ -34,10 +35,12 @@ public class UserService {
                 .password(passwordHash)
                 .build();
 
-        repository.save(userToRegister);
+        final User newUser = repository.save(userToRegister);
+        return UserPresentation.builder().id(newUser.getId()).username(username).build();
+
     }
 
-    public void login(final String username, final String password) {
+    public UserPresentation login(final String username, final String password) {
         final String usernameHash = encodingService.hash(username);
         final String passwordHash = encodingService.hash(password);
 
@@ -45,6 +48,7 @@ public class UserService {
         if (!user.getPassword().equals(passwordHash)){
             throw new AuthenticationError("Password mismatch");
         }
+        return UserPresentation.builder().id(user.getId()).username(username).build();
     }
 
     public User findById(final long userId){
