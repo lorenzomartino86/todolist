@@ -1,6 +1,5 @@
 package com.lmartino.todolist.service;
 
-import com.lmartino.todolist.boundary.model.UserCredential;
 import com.lmartino.todolist.repository.UserRepository;
 import com.lmartino.todolist.repository.model.User;
 import com.lmartino.todolist.service.exception.AuthenticationError;
@@ -9,9 +8,13 @@ import com.lmartino.todolist.service.exception.MissingUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Optional;
+
 import static java.lang.String.format;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -42,6 +45,14 @@ public class UserService {
         if (!user.getPassword().equals(passwordHash)){
             throw new AuthenticationError("Password mismatch");
         }
+    }
+
+    public User findById(final long userId){
+        final Optional<User> user = repository.findById(userId);
+        if (!user.isPresent()){
+            throw new MissingUser("Missing username");
+        }
+        return user.get();
     }
 
     private void assertNotDuplicatedUser(String username) {
