@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class TodolistConfiguration {
+public class SwaggerConfiguration {
 
     @Bean
     public Docket api() {
@@ -20,6 +20,7 @@ public class TodolistConfiguration {
                 .paths(PathSelectors.any())
                 .build();
     }
+
 
 
 }
