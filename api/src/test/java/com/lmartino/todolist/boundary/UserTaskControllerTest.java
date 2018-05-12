@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.lmartino.todolist.boundary.handler.TodolistHandler;
 import com.lmartino.todolist.boundary.model.TaskPresentation;
 import com.lmartino.todolist.boundary.model.TasklistPresentation;
-import com.lmartino.todolist.service.TasklistService;
+import com.lmartino.todolist.service.UserTaskService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -15,36 +15,33 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TasklistControllerTest {
+public class UserTaskControllerTest {
     private MockMvc mvc;
 
     private ObjectWriter jsonWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    private SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     @Mock
-    private TasklistService tasklistService;
+    private UserTaskService userTaskService;
 
     @InjectMocks
-    private TasklistController tasklistController;
+    private UserTaskController userTaskController;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mvc = MockMvcBuilders
-                .standaloneSetup(tasklistController)
+                .standaloneSetup(userTaskController)
                 .setControllerAdvice(new TodolistHandler())
                 .build();
     }
@@ -65,10 +62,10 @@ public class TasklistControllerTest {
                 .taskList(asList(task))
                 .build();
 
-        given(tasklistService.getTasklist(userId)).willReturn(tasklistPresentation);
+        given(userTaskService.getTasklist(userId)).willReturn(tasklistPresentation);
 
 
-        mvc.perform(get(String.format("/users/%d/tasklist", userId))
+        mvc.perform(get(String.format("/users/%d/tasks", userId))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskList.length()", is(1)))
@@ -99,10 +96,10 @@ public class TasklistControllerTest {
                 .taskList(asList(task1,task2))
                 .build();
 
-        given(tasklistService.getTasklist(userId)).willReturn(tasklistPresentation);
+        given(userTaskService.getTasklist(userId)).willReturn(tasklistPresentation);
 
 
-        mvc.perform(get(String.format("/users/%d/tasklist", userId))
+        mvc.perform(get(String.format("/users/%d/tasks", userId))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskList.length()", is(2)))
@@ -114,5 +111,73 @@ public class TasklistControllerTest {
                 .andExpect(jsonPath("$.taskList[1].lastUpdate", is(notNullValue())));
     }
 
+
+    @Test
+    public void givenUser_whenUserCreateTask_thenApiReturnCreatedTask() throws Exception{
+        final int userId = 1;
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        final String description = "Test Task";
+        final boolean checked = false;
+        final TaskPresentation task = TaskPresentation.builder()
+                .description(description)
+                .lastUpdate(now)
+                .checked(checked)
+                .build();
+
+        given(userTaskService.createTask(userId, description, checked)).willReturn(task);
+
+
+        mvc.perform(post(String.format("/users/%d/tasks", userId))
+                .content(jsonWriter.writeValueAsString(task))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.description", is(task.getDescription())))
+                .andExpect(jsonPath("$.checked", is(task.isChecked())))
+                .andExpect(jsonPath("$.lastUpdate", is(notNullValue())));
+    }
+
+
+    @Test
+    public void givenUser_whenUserUpdateTask_thenApiReturnUpdatedTask() throws Exception{
+        final int userId = 1;
+        final int taskId = 1;
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        final String description = "Test Task";
+        final boolean checked = false;
+        final TaskPresentation task = TaskPresentation.builder()
+                .description(description)
+                .lastUpdate(now)
+                .checked(checked)
+                .build();
+
+        given(userTaskService.updateTask(userId, taskId, description, checked)).willReturn(task);
+
+
+        mvc.perform(put(String.format("/users/%d/tasks/%d", userId, taskId))
+                .content(jsonWriter.writeValueAsString(task))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", is(task.getDescription())))
+                .andExpect(jsonPath("$.checked", is(task.isChecked())))
+                .andExpect(jsonPath("$.lastUpdate", is(notNullValue())));
+    }
+
+
+    @Test
+    public void givenUser_whenUserDeleteTask_thenApiReturnNoContentResponse() throws Exception{
+        final int userId = 1;
+        final int taskId = 1;
+
+        doNothing().when(userTaskService).deleteTask(userId, taskId);
+
+
+        mvc.perform(delete(String.format("/users/%d/tasks/%d", userId, taskId))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 
 }
