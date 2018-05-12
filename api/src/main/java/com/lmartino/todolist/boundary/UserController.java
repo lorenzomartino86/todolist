@@ -18,13 +18,13 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody UserCredential credential) {
-        userService.register(credential);
+        userService.register(credential.getUsername(), credential.getPassword());
         return ResponseEntity.ok(HttpEntity.EMPTY);
     }
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserCredential credential) {
-        userService.login(credential);
+        userService.login(credential.getUsername(), credential.getPassword());
         return ResponseEntity.ok(HttpEntity.EMPTY);
     }
 

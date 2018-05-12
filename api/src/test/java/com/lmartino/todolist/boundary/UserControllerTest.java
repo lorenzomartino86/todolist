@@ -3,9 +3,9 @@ package com.lmartino.todolist.boundary;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.lmartino.todolist.boundary.handler.TodolistHandler;
-import com.lmartino.todolist.service.exception.AuthenticationError;
 import com.lmartino.todolist.boundary.model.UserCredential;
 import com.lmartino.todolist.service.UserService;
+import com.lmartino.todolist.service.exception.AuthenticationError;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -17,9 +17,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.lmartino.todolist.boundary.model.Error.Message.AUTHENTICATION_ERROR;
 import static com.lmartino.todolist.boundary.model.UserCredential.builder;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,7 +79,7 @@ public class UserControllerTest {
 
         // Stub login service
        doThrow(new AuthenticationError("Cannot authenticate user"))
-               .when(userService).login(credential);
+               .when(userService).login(credential.getUsername(), credential.getPassword());
 
         mvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)

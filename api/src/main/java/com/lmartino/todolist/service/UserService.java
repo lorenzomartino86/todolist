@@ -17,35 +17,45 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public void register(UserCredential credential) {
-        assertNotDuplicatedUser(credential);
+    @Autowired
+    private EncodingService encodingService;
+
+    public void register(final String username, final String password) {
+        final String usernameHash = encodingService.hash(username);
+        final String passwordHash = encodingService.hash(password);
+
+        assertNotDuplicatedUser(usernameHash);
 
         User userToRegister = User.builder()
-                .username(credential.getUsername())
-                .password(credential.getPassword())
+                .username(usernameHash)
+                .password(passwordHash)
                 .build();
 
         repository.save(userToRegister);
     }
 
-    private void assertNotDuplicatedUser(UserCredential credential) {
-        final User user = repository.findByUsername(credential.getUsername());
-        if (user != null){
-            throw new DuplicatedUser(format("User %s is already stored in database", user.getUsername()));
-        }
-    }
+    public void login(final String username, final String password) {
+        final String usernameHash = encodingService.hash(username);
+        final String passwordHash = encodingService.hash(password);
 
-    public void login(UserCredential credential) {
-        final User user = tryToGetUser(credential);
-        if (!user.getPassword().equals(credential.getPassword())){
+        final User user = tryToGetUser(usernameHash);
+        if (!user.getPassword().equals(passwordHash)){
             throw new AuthenticationError("Password mismatch");
         }
     }
 
-    private User tryToGetUser(UserCredential credential) {
-        final User user = repository.findByUsername(credential.getUsername());
+    private void assertNotDuplicatedUser(String username) {
+        final User user = repository.findByUsername(username);
+        if (user != null){
+            throw new DuplicatedUser(format("User %s is already stored in database", username));
+        }
+    }
+
+
+    private User tryToGetUser(final String usernameHash) {
+        final User user = repository.findByUsername(usernameHash);
         if (user == null){
-            throw new MissingUser(format("Missing username %s", credential.getUsername()));
+            throw new MissingUser("Missing username");
         }
         return user;
     }
