@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static com.lmartino.todolist.repository.model.UserTask.*;
@@ -24,7 +26,10 @@ public class UserTaskService {
     private UserTaskRepository userTaskRepository;
 
     public TasklistPresentation getTasklist(int userId) {
-        return null;
+        final List<UserTask> tasks = userTaskRepository.findByUserId(userId);
+        List<TaskPresentation> tasklist = new ArrayList<>();
+        tasks.forEach(task -> tasklist.add(toPresentation(task)));
+        return TasklistPresentation.builder().taskList(tasklist).build();
     }
 
     public TaskPresentation createTask(long userId, String description, boolean checked) {

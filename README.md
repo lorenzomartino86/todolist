@@ -11,4 +11,16 @@
 - User can check/uncheck any task on their list
 - Consider performance
 
+
+#### Docker
+docker build -t local-tomcat .
+
+docker run -it -p 8080:8080 local-tomcat
+
+All in one: 
+
+mvn clean install && docker build -t local-tomcat . && docker run -it -p 8080:8080 local-tomcat
+
+
+
 #### References

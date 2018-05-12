@@ -32,6 +32,12 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <attachClasses>true</attachClasses>
+                    <webResources>
+                        <resource>
+                            <directory>target</directory>
+                        </resource>
+                    </webResources>
+                    <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
             <plugin>

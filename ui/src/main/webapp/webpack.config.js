@@ -2,14 +2,14 @@ const webpack = require('webpack');
 
 var path = require('path');
 
-const SRC_DIR = path.resolve(__dirname, 'app');
+const SRC_DIR = path.resolve(__dirname, '');
 const BUILD_DIR = path.resolve(__dirname, '../../../target/classes/static');
 
 console.log('##### BUILD_DIR', BUILD_DIR);
 console.log('##### SRC_DIR', SRC_DIR);
 
 module.exports = {
-    entry: SRC_DIR + '/app.js',
+    entry: SRC_DIR + '/index.js',
     devtool: 'source-map',
     cache: true,
     output: {
