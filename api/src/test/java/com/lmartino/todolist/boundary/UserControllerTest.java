@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private MockMvc mvc;
+    private ObjectWriter jsonWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @Mock
     private UserService userService;
@@ -42,8 +43,6 @@ public class UserControllerTest {
                 .build();
     }
 
-    private ObjectWriter jsonWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
     @Test
     public void givenNewUser_whenUserRegister_thenApiStoreCredentialAndReturnOk() throws Exception {
         UserCredential credential = builder()
@@ -51,7 +50,7 @@ public class UserControllerTest {
                 .password("pwd123")
                 .build();
 
-        mvc.perform(post("/register")
+        mvc.perform(post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
                 .andExpect(status().isOk());
@@ -64,7 +63,7 @@ public class UserControllerTest {
                 .password("pwd123")
                 .build();
 
-        mvc.perform(post("/login")
+        mvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
                 .andExpect(status().isOk());
@@ -81,7 +80,7 @@ public class UserControllerTest {
        doThrow(new AuthenticationError("Cannot authenticate user"))
                .when(userService).login(credential.getUsername(), credential.getPassword());
 
-        mvc.perform(post("/login")
+        mvc.perform(post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWriter.writeValueAsString(credential)))
                 .andExpect(status().isForbidden())
