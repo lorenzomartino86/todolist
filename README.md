@@ -14,7 +14,7 @@ A simple online TODO list with a web interface that can be used in all popular w
 - Consider performance
 
 #### Project Architecture
-This project separates APIs from UIs component through the usage of following modules:
+This project separates API from UI components through the usage of following modules:
 - **api:** Maven module used to collect Rest API, business logic and persistence layer. This module is generating a Jar library.
 - **ui:** Maven module used to handle ui components (html, javascript and css). This module is generating a WAR and depends on api.
 
@@ -25,15 +25,16 @@ Developments on the API component have been done following a TDD methodology.
 #### Main Technologies Used
 
 For the API components the main frameworks/tools used are:
-- *OpenJDK 1.8* 
-- *Spring Core, Beans and Context:* Used for facilitate dependency injection
-- *Spring MVC:* Used to facilitate the creation of rest endpoints
-- *Spring Data and Hibernate:* Used to facilitate database mapping
-- *Lombok:* Used to avoid common java boilerplate code
-- *Jackson:* Used for serialization/deserialization
-- *JUnit:* Used for test automation
-- *Mockito:* Used for stub during test automation
-- *Spring Test:* Used for facilitate testing of Spring Components
+- *OpenJDK 1.8* .
+- *Spring Core, Beans and Context:* Used for facilitate dependency injection.
+- *Spring MVC:* Used to facilitate the creation of rest endpoints.
+- *Spring Data and Hibernate:* Used to facilitate database mapping.
+- *Lombok:* Used to avoid common java boilerplate code.
+- *Jackson:* Used for serialization/deserialization.
+- *JUnit:* Used for test automation.
+- *Mockito:* Used for stub during test automation.
+- *Spring Test:* Used for facilitate testing of Spring Components.
+- *H2:* as in memory relational database.
 
 Basically the build process run unit and integration tests separately and generates a Jar file.
 
@@ -45,7 +46,7 @@ For the UI components the main frameworks/tools used are:
  
 
 #### Instructions for build
-In order to build the final WAR file and  we need to perform following commands:
+In order to build the final WAR file  we need to perform following commands:
 
 1. Build API module
 ```
@@ -64,7 +65,8 @@ Now we can deploy generated WAR to a Tomcat container. The generated file is und
 
 
 #### Build and deploy with docker
-Alternatively we can speed up deployment using docker. After the step 2 of the build instructions we can build a docker image:
+Alternatively we can speed up deployment using docker. Dockerfile provided in this project build an image starting from *tomcat:8.0.52-jre8-alpine* docker tag image.
+After the step 2 of the build instructions we can build a docker image:
 
 ```
     docker build -t local-tomcat .
@@ -78,7 +80,7 @@ And then run docker container forwarding port 8080 from tomcat service:
 #### Web App Usage
 In order to do a manual test of APIs we can import Postman collection stored under folder *postman/todolist.postman_collection.json*.
 
-The web app can be reached at the address http://localhost:8080/todolist. We can Login 
+The web app can be reached at the address http://localhost:8080/todolist. We can Login via specific form:
 
   ![alt text](img/login.png)
   
@@ -86,11 +88,11 @@ If not registered we can do it in this form:
 
   ![alt text](img/registration.png)
   
-After registration/login form we are redirect to our task list management:
+After registration/login form we are redirected to our task list management:
 
  ![alt text](img/start_tasklist.png)
  
-We can insert new tasks, remove other and check/unckeck a task we can see the following result:
+We can add new task, remove an existing one and check/unckeck from the list and we can see a result as the following one:
 
  ![alt text](img/tasklist.png)
 
@@ -102,12 +104,12 @@ User can:
 
 #### CI Pipeline
 
-A CI pipeline can we checked in [circleci](https://circleci.com/gh/lorenzomartino86/todolist/tree/master).
+A CI pipeline can be checked in [circleci](https://circleci.com/gh/lorenzomartino86/todolist/tree/master).
 It mainly build project components and run a Docker container in hosted CI server.
 
 #### Improvements
 
-There are infinite improvements in this project. Unfortunately the time spent to do this assignment was very limited (a couple of days).
+There are infinite improvements for this project. Unfortunately the time spent to do this assignment was very limited (a couple of days).
 
 1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework to secure our next refactoring operations.
 2. Enhance security with HTTPS for login and user session management.

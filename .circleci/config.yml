@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Run Docker Container
           command: |
-              docker run -d -p 8080:8080 local-tomcat &&
+              docker run -d -p 8888:8080 local-tomcat &&
               sleep 10 &&
               docker ps &&
               curl --retry 10 --retry-delay 5 -v http://localhost:8080
