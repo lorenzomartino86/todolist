@@ -22,6 +22,14 @@ This approach get the benefit that components are decoupled and can be built and
 
 Developments on the API component have been done following a TDD methodology.
 
+I've tried to follow the *four rules of simple design* but the work is far to be completed:
+1. Tests pass
+2. Express intent
+3. Dont repeate yourself
+4. Small pieces of code.
+
+I've spent a lot of time to define the overall UI components
+
 #### Main Technologies Used
 
 For the API components the main frameworks/tools used are:
@@ -65,7 +73,7 @@ Now we can deploy generated WAR to a Tomcat container. The generated file is und
 
 
 #### Build and deploy with docker
-Alternatively we can speed up deployment using docker. Dockerfile provided in this project build an image starting from *tomcat:8.0.52-jre8-alpine* docker tag image.
+Alternatively we can speed up deployment using docker. Dockerfile provided in this project builds an image starting from *tomcat:8.0.52-jre8-alpine* docker tag image.
 After the step 2 of the build instructions we can build a docker image:
 
 ```
@@ -118,3 +126,4 @@ There are infinite improvements for this project. Unfortunately the time spent t
 5. Add Swagger Documentation for API management.
 6. Refactoring API code.
 7. Add acceptance criterion running as automated e2e tests on the pipeline.
+8. Add test coverage reports and Sonar integration
