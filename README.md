@@ -111,7 +111,7 @@ It mainly build project components and run a Docker container in hosted CI serve
 
 There are infinite improvements for this project. Unfortunately the time spent to do this assignment was very limited (a couple of days).
 
-1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework to secure our next refactoring operations.
+1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework (Mocha, Jasmine) to secure our next refactoring operations.
 2. Enhance security with HTTPS for login and user session management.
 3. Add more validations on backend API
 4. We need to refactor CSS files as well.
