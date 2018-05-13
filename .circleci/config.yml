@@ -18,11 +18,11 @@ jobs:
 
       - run:
           name: API jar Build
-          command: mvn clean package -f api/pom.xml -DskipTests=false
+          command: mvn clean install -f api/pom.xml -Dmaven.test.skip=true
 
       - run:
           name: UI Build
-          command: mvn clean package -f ui/pom.xml
+          command: mvn clean package -f ui/pom.xml -Dmaven.test.skip=true
 
       - run:
           name: Build Docker Image
