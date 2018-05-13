@@ -32,9 +32,9 @@ jobs:
           name: Run Docker Container
           command: |
               docker run -i -t -d -p 8080:8080 local-tomcat &&
-              sleep 10 &&
+              sleep 20 &&
               docker inspect local-tomcat &&
-              curl -u tomcat:tomcat --retry 10 --retry-delay 5 -v http://localhost:8080
+              curl --retry 10 --retry-delay 5 -v http://localhost:8080
 
       - run:
           name: Acceptance Tests
