@@ -18,8 +18,9 @@ This project separates APIs from UIs component through the usage of following mo
 - **api:** Maven module used to collect Rest API, business logic and persistence layer. This module is generating a Jar library.
 - **ui:** Maven module used to handle ui components (html, javascript and css). This module is generating a WAR and depends on api.
 
-This approach get the benefit that components are decoupled and can be built and deployed separately.
+This approach get the benefit that components are decoupled and can be built and deployed separately. 
 
+Developments on the API component have been done following a TDD methodology.
 
 #### Main Technologies Used
 
@@ -40,7 +41,7 @@ For the UI components the main frameworks/tools used are:
 - *HTML5*
 - *CSS3*
 - *Javascript*
-- *jQuery*
+- *jQuery*: Used to facilitate DOM manipulation, event handling and Ajax 
  
 
 #### Instructions for build
@@ -99,12 +100,18 @@ User can:
 3. Check/uncheck a task on the list just clicking on the item name
 4. See when task has been updated last time just on mouse hover the task name (a tooltip will show the last update timestamp)
 
+#### CI Pipeline
+
+A CI pipeline can we checked in [circleci](https://circleci.com/gh/lorenzomartino86/todolist/tree/master).
+It mainly build project components and run a Docker container in hosted CI server.
+
 #### Improvements
 
-There are infinite improvements in this project. 
+There are infinite improvements in this project. Unfortunately the time spent to do this assignment was very limited (a couple of days).
 
 1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework to secure our next refactoring operations.
-2. Enhance security with HTTPS call for login and user session management.
+2. Enhance security with HTTPS for login and user session management.
 3. Add more validations on backend API
 4. We need to refactor CSS files as well.
 5. Add Swagger Documentation for API management.
+6. Refactoring API code.
