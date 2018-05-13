@@ -107,3 +107,4 @@ There are infinite improvements in this project.
 2. Enhance security with HTTPS call for login and user session management.
 3. Add more validations on backend API
 4. We need to refactor CSS files as well.
+5. Add Swagger Documentation for API management.
