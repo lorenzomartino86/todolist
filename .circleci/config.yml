@@ -30,7 +30,7 @@ jobs:
 
       - run:
           name: Run Docker Container
-          command: docker run -i -t -d -p 8080:8080 local-tomcat && sleep 10
+          command: docker run -i -t -d -p 8080:8080 local-tomcat && sleep 10 && docker inspect local-tomcat
 
       - run:
           name: Acceptance Tests
