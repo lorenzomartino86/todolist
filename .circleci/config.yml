@@ -10,7 +10,6 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker
 
       - run:
           name: API Unit and Integration Tests
