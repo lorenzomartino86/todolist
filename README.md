@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/lorenzomartino86/todolist.svg?style=svg)](https://circleci.com/gh/lorenzomartino86/todolist)
 
 ## TODO List
-
+A simple online TODO list with a web interface that can be used in all popular web browsers.
 
 #### Use Cases
 - User can sign in using unique login and password securely (this can be hard coded
