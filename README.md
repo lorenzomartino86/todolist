@@ -117,3 +117,4 @@ There are infinite improvements for this project. Unfortunately the time spent t
 4. We need to refactor CSS files as well.
 5. Add Swagger Documentation for API management.
 6. Refactoring API code.
+7. Add acceptance criterion running as automated e2e tests on the pipeline.
