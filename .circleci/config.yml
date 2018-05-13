@@ -33,5 +33,9 @@ jobs:
           command: docker run -i -t -d -p 8080:8080 local-tomcat && sleep 10
 
       - run:
+          name: Acceptance Tests
+          command: mvn clean test -f acceptance-test/pom.xml -Drest.url=http://127.0.0.1:8080/
+
+      - run:
           name: Stop Docker Container
           command: docker stop $(docker ps -a -q)

@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/lorenzomartino86/todolist.svg?style=svg)](https://circleci.com/gh/lorenzomartino86/todolist)
+
 ## TODO List
 
 
