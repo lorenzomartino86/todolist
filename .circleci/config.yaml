@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: Unit and Integration Tests
+          command: mvn clean verify
+
+      - run:
+          name: WAR Build
+          command: mvn clean package -DskipTests=false
+
+      - run:
+          name: Build Docker Image
+          command: docker build -t local-tomcat .
+
+      - run:
+          name: Run Docker Container
+          command: docker run -i -t -d -p 8080:8080 local-tomcat && sleep 10
+
+      - run:
+          name: Stop Docker Container
+          command: docker stop $(docker ps -a -q)
