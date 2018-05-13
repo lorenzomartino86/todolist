@@ -81,22 +81,22 @@ The web app can be reached at the address http://localhost:8080/todolist. We can
 
   ![alt text](img/login.png)
   
-If not registered we can do it in this page:
+If not registered we can do it in this form:
 
   ![alt text](img/registration.png)
   
-After registration/login we can start our task list management:
+After registration/login form we are redirect to our task list management:
 
  ![alt text](img/start_tasklist.png)
  
-After inserting and checking a task we can see the following result:
+We can insert new tasks, remove other and check/unckeck a task we can see the following result:
 
  ![alt text](img/tasklist.png)
 
 User can:
 1. Add new task with a description
 2. Remove a task from the list pressing button X on the right
-3. Check a task on the list just clicking on the item name
+3. Check/uncheck a task on the list just clicking on the item name
 4. See when task has been updated last time just on mouse hover the task name (a tooltip will show the last update timestamp)
 
 #### Improvements

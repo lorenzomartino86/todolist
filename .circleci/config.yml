@@ -34,7 +34,11 @@ jobs:
               docker run -d -p 8080:8080 local-tomcat &&
               sleep 10 &&
               docker ps &&
-              curl --retry 10 --retry-delay 5 -v http://localhost:8080 ; if [ $? != 0 ] ; then sudo apt-get install traceroute ; HOSTNAME=example.org; ping -c 10 $HOSTNAME > $CIRCLE_ARTIFACTS/network-report.log ; traceroute $HOSTNAME >> $CIRCLE_ARTIFACTS/network-report.log ; fi
+              sudo apt-get install traceroute &&
+              export HOSTNAME=localhost &&
+              ping -c 10 $HOSTNAME > $CIRCLE_ARTIFACTS/network-report.log &&
+              traceroute $HOSTNAME >> $CIRCLE_ARTIFACTS/network-report.log &&
+              curl --retry 10 --retry-delay 5 -v http://localhost:8080
 
       - run:
           name: Acceptance Tests
