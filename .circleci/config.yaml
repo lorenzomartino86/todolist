@@ -13,12 +13,16 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: Unit and Integration Tests
-          command: mvn clean verify
+          name: API Unit and Integration Tests
+          command: mvn clean verify -f api/pom.xml
 
       - run:
-          name: WAR Build
-          command: mvn clean package -DskipTests=false
+          name: API jar Build
+          command: mvn clean package -f api/pom.xml -DskipTests=false
+
+      - run:
+          name: UI Build
+          command: mvn clean package -f ui/pom.xml
 
       - run:
           name: Build Docker Image
