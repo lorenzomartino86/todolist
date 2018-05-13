@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,12 +47,15 @@ public class UserTaskServiceTest {
         final String taskDescription = "Test Task";
         final Date currentDate = new Date();
         final boolean checked = false;
-        final UserTask userTask = UserTask.builder().user(user).checked(checked).lastUpdate(currentDate).description(taskDescription).build();
+        final UserTask userTask = UserTask.builder().id(1).user(user).checked(checked).lastUpdate(currentDate).description(taskDescription).build();
 
         when(userTaskRepository.save(any(UserTask.class))).thenReturn(userTask);
 
         final TaskPresentation task = userTaskService.createTask(userId, taskDescription, checked);
         assertNotNull(task);
+        assertThat(task.getId(), is(userTask.getId()));
+        assertThat(task.getDescription(), is(userTask.getDescription()));
+        assertThat(task.getLastUpdate(), is(notNullValue()));
 
     }
 
@@ -66,7 +70,7 @@ public class UserTaskServiceTest {
         final String taskDescription = "Test Task";
         final Date currentDate = new Date();
         final boolean checked = false;
-        final long taskId = 1L;
+        final int taskId = 1;
         final UserTask userTask = UserTask.builder().id(taskId).user(user).checked(checked).lastUpdate(currentDate).description(taskDescription).build();
 
         when(userTaskRepository.findById(taskId)).thenReturn(Optional.of(userTask));
@@ -90,7 +94,7 @@ public class UserTaskServiceTest {
         final String taskDescription = "Test Task";
         final Date currentDate = new Date();
         final boolean checked = false;
-        final long taskId = 1L;
+        final int taskId = 1;
         final UserTask userTask = UserTask.builder().id(taskId).user(user).checked(checked).lastUpdate(currentDate).description(taskDescription).build();
 
         when(userTaskRepository.findById(taskId)).thenReturn(Optional.of(userTask));

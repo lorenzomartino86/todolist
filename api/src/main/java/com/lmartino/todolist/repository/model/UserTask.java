@@ -17,7 +17,7 @@ import java.util.Date;
 public class UserTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="user_id")

@@ -53,6 +53,7 @@ public class UserTaskControllerTest {
         final LocalDateTime now = LocalDateTime.now();
 
         final TaskPresentation task = TaskPresentation.builder()
+                .id(1)
                 .description("Test Task")
                 .lastUpdate(now)
                 .checked(false)
@@ -69,6 +70,7 @@ public class UserTaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskList.length()", is(1)))
+                .andExpect(jsonPath("$.taskList[0].id", is(task.getId())))
                 .andExpect(jsonPath("$.taskList[0].description", is(task.getDescription())))
                 .andExpect(jsonPath("$.taskList[0].checked", is(task.isChecked())))
                 .andExpect(jsonPath("$.taskList[0].lastUpdate", is(notNullValue())));
@@ -82,11 +84,13 @@ public class UserTaskControllerTest {
         final LocalDateTime now = LocalDateTime.now();
 
         final TaskPresentation task1 = TaskPresentation.builder()
+                .id(1)
                 .description("Test Task")
                 .lastUpdate(now)
                 .checked(false)
                 .build();
         final TaskPresentation task2 = TaskPresentation.builder()
+                .id(2)
                 .description("Test Task 2")
                 .lastUpdate(now.minusDays(2))
                 .checked(true)
@@ -103,9 +107,11 @@ public class UserTaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskList.length()", is(2)))
+                .andExpect(jsonPath("$.taskList[0].id", is(task1.getId())))
                 .andExpect(jsonPath("$.taskList[0].description", is(task1.getDescription())))
                 .andExpect(jsonPath("$.taskList[0].checked", is(task1.isChecked())))
                 .andExpect(jsonPath("$.taskList[0].lastUpdate", is(notNullValue())))
+                .andExpect(jsonPath("$.taskList[1].id", is(task2.getId())))
                 .andExpect(jsonPath("$.taskList[1].description", is(task2.getDescription())))
                 .andExpect(jsonPath("$.taskList[1].checked", is(task2.isChecked())))
                 .andExpect(jsonPath("$.taskList[1].lastUpdate", is(notNullValue())));
@@ -121,6 +127,7 @@ public class UserTaskControllerTest {
         final String description = "Test Task";
         final boolean checked = false;
         final TaskPresentation task = TaskPresentation.builder()
+                .id(1)
                 .description(description)
                 .lastUpdate(now)
                 .checked(checked)
@@ -133,6 +140,7 @@ public class UserTaskControllerTest {
                 .content(jsonWriter.writeValueAsString(task))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(task.getId())))
                 .andExpect(jsonPath("$.description", is(task.getDescription())))
                 .andExpect(jsonPath("$.checked", is(task.isChecked())))
                 .andExpect(jsonPath("$.lastUpdate", is(notNullValue())));
@@ -149,6 +157,7 @@ public class UserTaskControllerTest {
         final String description = "Test Task";
         final boolean checked = false;
         final TaskPresentation task = TaskPresentation.builder()
+                .id(1)
                 .description(description)
                 .lastUpdate(now)
                 .checked(checked)
@@ -161,6 +170,7 @@ public class UserTaskControllerTest {
                 .content(jsonWriter.writeValueAsString(task))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(task.getId())))
                 .andExpect(jsonPath("$.description", is(task.getDescription())))
                 .andExpect(jsonPath("$.checked", is(task.isChecked())))
                 .andExpect(jsonPath("$.lastUpdate", is(notNullValue())));

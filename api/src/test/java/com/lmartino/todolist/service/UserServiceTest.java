@@ -52,7 +52,7 @@ public class UserServiceTest {
         final String password = "pwd123";
 
         // Stub encoding service and repository
-        User user = User.builder().username(username).password(password).build();
+        User user = User.builder().id(1L).username(username).password(password).build();
         when(encodingService.hash(username)).thenReturn(username);
         when(encodingService.hash(password)).thenReturn(password);
         when(userRepository.findByUsername(username)).thenReturn(user);

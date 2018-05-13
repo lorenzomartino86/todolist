@@ -47,7 +47,7 @@ public class UserTaskService {
         return toPresentation(storedUserTask);
     }
 
-    public TaskPresentation updateTask(long userId, long taskId, String description, boolean checked) {
+    public TaskPresentation updateTask(long userId, int taskId, String description, boolean checked) {
         userService.findById(userId);
         final Optional<UserTask> userTaskEntity = userTaskRepository.findById(taskId);
 
@@ -65,7 +65,7 @@ public class UserTaskService {
         return toPresentation(updatedUserTask);
     }
 
-    public void deleteTask(long userId, long taskId) {
+    public void deleteTask(long userId, int taskId) {
         userService.findById(userId);
         final Optional<UserTask> userTaskEntity = userTaskRepository.findById(taskId);
 
@@ -77,6 +77,7 @@ public class UserTaskService {
 
     private TaskPresentation toPresentation(UserTask updatedUserTask) {
         return TaskPresentation.builder()
+                .id(updatedUserTask.getId())
                 .description(updatedUserTask.getDescription())
                 .checked(updatedUserTask.isChecked())
                 .lastUpdate(updatedUserTask.getLastUpdate().toInstant()

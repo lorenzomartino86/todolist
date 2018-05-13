@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserTaskRepository extends JpaRepository<UserTask, Long> {
+public interface UserTaskRepository extends JpaRepository<UserTask, Integer> {
 
     @Query(" SELECT ut FROM UserTask ut WHERE ut.user.id = :userId" )
     List<UserTask> findByUserId(@Param("userId") long userId);
