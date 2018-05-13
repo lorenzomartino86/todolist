@@ -14,7 +14,9 @@ A simple online TODO list with a web interface that can be used in all popular w
 - Consider performance
 
 #### Project Architecture
+The architecture of this project 
 
+- **api:** Maven module used to collect Rest API, business logic and persistence layer. This module 
 
 
 #### Technologies
