@@ -1,8 +1,8 @@
 $(document).ready(function() {
-     prepareTaskList();
+     loadTasks();
 });
 
-function prepareTaskList(){
+function loadTasks(){
    var userId = window.location.hash.substring(1)
    $.ajax({
           type: 'get',
@@ -14,15 +14,40 @@ function prepareTaskList(){
                   var task = tasks[i]
                   var li = document.createElement("li");
                   li.id = task.id
-                  li.setAttribute("lastUpdate", task.lastUpdate);
-                  var t = document.createTextNode(task.description);
+                  var descriptionNode = document.createTextNode(task.description);
+                  li.setAttribute('description', task.description);
+                  li.appendChild(descriptionNode);
 
-                  li.appendChild(t);
+                  var lastUpdate = document.createTextNode(
+                          "Last Update: " + parseLastUpdateTime(task.lastUpdate));
+                  var tooltipSpan = document.createElement("SPAN");
+                  tooltipSpan.className = "tooltip";
+                  tooltipSpan.appendChild(lastUpdate);
+                  li.appendChild(tooltipSpan);
 
-                  // Add a "checked" symbol when clicking on a task
+                  if (task.checked){
+                    li.classList.toggle("checked");
+                  }
+
+                  // Add a "checked" toggle when clicking on a task
                   li.addEventListener('click', function(ev) {
                      if (ev.target.tagName === 'LI') {
                          ev.target.classList.toggle('checked');
+                         var taskId = this.id;
+                         var checked = this.classList.contains("checked");
+                         var description = this.getAttribute('description');
+
+                         $.ajax({
+                           type: 'put',
+                           url: "/todolist/rest/users/"+userId+"/tasks/"+taskId,
+                           data: JSON.stringify({"description": description, "checked": checked}),
+                           contentType: 'application/json',
+                           success: function (result) {},
+                           error: function (e) {
+                              console.log(e);
+                              ev.target.classList.toggle('checked');
+                           }
+                         })
                      }
                   }, false);
 
@@ -32,6 +57,19 @@ function prepareTaskList(){
                   var txt = document.createTextNode("\u00D7");
                   var span = document.createElement("SPAN");
                   span.className = "delete";
+                  span.onclick = function(){
+                      var taskId = this.parentNode.id
+                      $.ajax({
+                             type: 'delete',
+                             url: "/todolist/rest/users/"+userId+"/tasks/"+taskId,
+                             success: function (result) {
+                                 document.getElementById(taskId).remove();
+                             },
+                             error: function (e) {
+                                 console.log(e);
+                             }
+                      })
+                  }
                   span.appendChild(txt);
                   li.appendChild(span);
               }
@@ -44,58 +82,26 @@ function prepareTaskList(){
 
 // Create a new task
 function addTask() {
-  var li = document.createElement("li");
+  var userId = window.location.hash.substring(1)
   var description = document.getElementById("description").value;
-  var t = document.createTextNode(description);
-  li.appendChild(t);
-  if (inputValue === '') {
+  if (description === '') {
        alert("You must write something!");
-  } else {
-      document.getElementById("tasklist").appendChild(li);
   }
-  document.getElementById("description").value = "";
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-     close[i].onclick = function() {
-       var div = this.parentElement;
-       div.style.display = "none";
-     }
-  }
+  $.ajax({
+         type: 'post',
+         url: "/todolist/rest/users/"+userId+"/tasks",
+         data: JSON.stringify({"description": description, "checked": false}),
+         contentType: 'application/json',
+         success: function (result) {
+              location.reload();
+         },
+         error: function (e) {
+              console.log(e);
+         }
+  })
 }
 
-function removeTask() {
-    var div = this.parentElement;
-    var taskId
-    div.style.display = "none";
-    $.ajax({
-        type: 'delete',
-        url: "/todolist/rest/users/"+userId+"/tasks/"+taskId,
-        success: function (result) {
-           var i = 0;
-           var tasks = result.taskList;
-           for (i=0; i < tasks.length; i++ ){
-                      var li = document.createElement("li");
-                      var t = document.createTextNode(tasks[i].description);
-                      li.appendChild(t);
-                      document.getElementById("myUL").appendChild(li);
-
-                      // Create delete icon button
-                      var txt = document.createTextNode("\u00D7");
-                      var span = document.createElement("SPAN");
-                      span.className = "delete";
-                      span.appendChild(txt);
-                      span.onClick()
-                      li.appendChild(span);
-                  }
-              },
-              error: function (e) {
-                 console.log(e);
-              }
-         });
+function parseLastUpdateTime(lastUpdate){
+   var parsedLastUpdate = new Date(lastUpdate);
+   return parsedLastUpdate.toString();
 }

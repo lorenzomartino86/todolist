@@ -21,6 +21,7 @@ $(document).ready(function(){
             },
             error: function (e) {
                console.log(e);
+               alert("Authentication Error");
             }
         })
      }
@@ -33,12 +34,21 @@ $(document).ready(function(){
 
      var username = $("#username").val();
      var password = $("#password").val();
+     var confirmPassword = $("#confirmPassword").val();
 
     // Checking for blank fields.
-    if( username =='' || password ==''){
+    if( username =='' || password =='' || confirmPassword == ''){
     $('input[type="text"],input[type="password"]').css("border","2px solid red");
     $('input[type="text"],input[type="password"]').css("box-shadow","0 0 3px red");
         alert("Please fill all fields!!!!!!");
+    } else if (username.length < 3) {
+        $('input[type="text"]').css("border","2px solid red");
+        $('input[type="text"]').css("box-shadow","0 0 3px red");
+        alert("Username should be at least 3 digits lenght");
+    } else if (password != confirmPassword){
+        $('input[type="password"]').css("border","2px solid red");
+        $('input[type="password"]').css("box-shadow","0 0 3px red");
+        alert("Passwords not matching");
     }else {
         $.ajax({
             type: 'post',
@@ -56,6 +66,4 @@ $(document).ready(function(){
      }
      }
      )
-     });
-
-
+});

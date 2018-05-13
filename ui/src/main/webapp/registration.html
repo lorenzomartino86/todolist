@@ -7,54 +7,12 @@
     <link rel="stylesheet" href="css/style.css"/>
     <!-- Include CSS File Here -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/login.js"></script>
-    <script type="text/javascript">
-
-        function validate() {
-                var username = document.forms['form']['username'];
-                var password = document.forms['form']['password'];
-                var password_confirm = document.forms['form']['password_confirm'];
-
-              // validate username
-              if (username.value == "") {
-                username.style.border = "1px solid red";
-                document.getElementById('username').style.color = "red";
-                name_error.textContent = "Username is required";
-                username.focus();
-                return false;
-              }
-              // validate username
-              if (username.value.length < 3) {
-                username.style.border = "1px solid red";
-                document.getElementById('username').style.color = "red";
-                name_error.textContent = "Username must be at least 3 characters";
-                username.focus();
-                return false;
-              }
-              // validate password
-              if (password.value == "") {
-                password.style.border = "1px solid red";
-                document.getElementById('password').style.color = "red";
-                password_confirm.style.border = "1px solid red";
-                password_error.textContent = "Password is required";
-                password.focus();
-                return false;
-              }
-              // check if the two passwords match
-              if (password.value != password_confirm.value) {
-                password.style.border = "1px solid red";
-                document.getElementById('confirmPassword').style.color = "red";
-                password_confirm.style.border = "1px solid red";
-                password_error.innerHTML = "The two passwords do not match";
-                return false;
-              }
-        }
-    </script>
+    <script type="text/javascript" src="js/login.js?version=1.1"></script>
 </head>
 <body>
 <div class="container">
     <div class="main">
-        <form class="form" method="post" onsubmit="return validate()" action="#">
+        <form class="form" method="post" action="#">
             <h2>User Registration</h2>
             <label>Username:</label>
             <input type="text" name="demail" id="username">
