@@ -79,25 +79,31 @@ In order to do a manual test of APIs we can import Postman collection stored und
 
 The web app can be reached at the address http://localhost:8080/todolist. We can Login 
 
-  LOGIN IMAGE
+  ![alt text](img/login.png)
   
 If not registered we can do it in this page:
 
-  REGISTER IMAGE
+  ![alt text](img/registration.png)
   
 After registration/login we can start our task list management:
 
- TASK LIST INIT 
+ ![alt text](img/start_tasklist.png)
  
 After inserting and checking a task we can see the following result:
 
- TASK LIST MANAGEMENT
+ ![alt text](img/tasklist.png)
 
+User can:
+1. Add new task with a description
+2. Remove a task from the list pressing button X on the right
+3. Check a task on the list just clicking on the item name
+4. See when task has been updated last time just on mouse hover the task name (a tooltip will show the last update timestamp)
 
 #### Improvements
 
 There are infinite improvements in this project. 
 
-First of all we need to refactor the behavior on the Javascript files. 
-In order to do that we can start writing tests to secure our next refactoring operations.
-
+1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework to secure our next refactoring operations.
+2. Enhance security with HTTPS call for login and user session management.
+3. Add more validations on backend API
+4. We need to refactor CSS files as well.
