@@ -117,7 +117,7 @@ It mainly build project components and run a Docker container in hosted CI serve
 
 #### Improvements
 
-There are infinite improvements for this project. Unfortunately the time spent to do this assignment was very limited (a couple of days).
+There are infinite improvements for this project. The time spent to do this project was time bounded (a couple of days).
 
 1. We need to refactor the behavior on the Javascript files. In order to do that we can start adopting a testing framework (Mocha, Jasmine) to secure our next refactoring operations.
 2. Enhance security with HTTPS for login and user session management.
